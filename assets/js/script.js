@@ -34,7 +34,7 @@ function getAPI2() {
     .then(function (data) {
         // console.log(data)
         dataArr = data.daily
-        for (var i = 0; i < dataArr.length; i++) {
+        for (var i = 0; i < 6; i++) {
             // console.log(dataArr[i])
             // dt[i] = new Date(dataArr[i].dt*1000).toLocaleDateString('en-US')
             // humidity[i] = dataArr[i].humidity

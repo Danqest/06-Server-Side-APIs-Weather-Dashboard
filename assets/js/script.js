@@ -18,7 +18,7 @@ function initloadBtns() {
     storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
     if (storedSearches != null) {
         for (let i = 0; i < storedSearches.length; i++) {
-            histBtn = document.createElement('btn')
+            var histBtn = document.createElement('btn')
             histBtn.classList = 'btn btn-outline-success me-2'
             histBtn.setAttribute('type', 'button')
             histBtn.setAttribute('id', storedSearches[i])
@@ -33,8 +33,6 @@ function initloadBtns() {
         }
     }
 }
-
-
 
 function loadBtns(city) {
     // check if value already exists in local storage

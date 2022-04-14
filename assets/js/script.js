@@ -6,7 +6,7 @@ var subtitle2 = document.querySelector('.subtitle2')
 var searchTerm = document.querySelector('.form-control')
 var formEl = document.querySelector('#search-form')
 var containerHist = document.querySelector('#history-container')
-
+var city = ""
 var APIKey = 'e2e8aa238c17cef17b8835fdca0cfb44'
 var storedSearches = []
 
@@ -15,40 +15,33 @@ function init() {
 }
 
 function initloadBtns() {
-    var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
-    if (storedSearches === null) {
-        storedSearches = []
+    storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
+    if (storedSearches != null) {
+        for (let i = 0; i < storedSearches.length; i++) {
+            histBtn = document.createElement('btn')
+            histBtn.classList = 'btn btn-outline-success me-2'
+            histBtn.setAttribute('type', 'button')
+            histBtn.setAttribute('id', storedSearches[i])
+            histBtn.innerHTML = storedSearches[i]
+            let city = storedSearches[i]
+            histBtn.addEventListener('click', (function () {
+                clearForm()
+                getAPI(city)
+                searchTerm.value = ''
+            }))
+            containerHist.appendChild(histBtn)
+        }
     }
-    // else if (storedSearches != null) {
-    //     for (var i = 0; i < storedSearches.length; i++) {
-    //         var btnID = document.querySelector(('#'+storedSearches[i]))
-    //         if (btnID === null) {
-    //             var histBtn = document.createElement('btn')
-    //             histBtn.classList = 'btn btn-outline-success me-2'
-    //             histBtn.setAttribute('type', 'button')
-    //             // histBtn.setAttribute('id', city)
-    //             histBtn.innerHTML = storedSearches[i]
-    //             containerHist.appendChild(histBtn)
-    //             histBtn.addEventListener('click', function () {
-    //                 var city = histBtn.innerHTML.trim()
-    //                 clearForm()
-    //                 getAPI(city)
-    //                 searchTerm.value = ''
-    //             })
-                
-    //         }
-            
-    //     }
-    // }  
 }
+
+
 
 function loadBtns(city) {
     // check if value already exists in local storage
-    // if not, add to local storage, erase prior buttons, and populate all buttons
-    // if does, erase prior buttons and populate all buttons again
-    var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
+    // if not, add to local storage and populate button
+    storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
+    
     if (storedSearches === null) {
-        console.log('null')
         // add to local storage, erase prior buttons, and populate all buttons
         var histBtn = document.createElement('btn')
         histBtn.classList = 'btn btn-outline-success me-2'
@@ -62,47 +55,31 @@ function loadBtns(city) {
             getAPI(city)
             searchTerm.value = ''
         })
-        // storedSearches.push(city)
+        storedSearches = []
         storedSearches[0] = city
         localStorage.setItem('successful-searches', JSON.stringify(storedSearches))
     }
-    else if ((city in checkValues.values()) == (false || null)) {
-        console.log('not in localstorage')
-
-    }
-
-
-
-
-
-
-
-    storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
-    if (storedSearches === null) {
-        storedSearches = histSearches
-    }
     else if (storedSearches != null) {
-        for (var i = 0; i < storedSearches.length; i++) {
-            console.log(storedSearches[i])
-            var btnID = document.querySelector(('#'+storedSearches[i]))
-            if (btnID === null) {
-                var histBtn = document.createElement('btn')
-                histBtn.classList = 'btn btn-outline-success me-2'
-                histBtn.setAttribute('type', 'button')
-                histBtn.setAttribute('id', city)
-                histBtn.innerHTML = storedSearches[i]
-                containerHist.appendChild(histBtn)
-                histBtn.addEventListener('click', function () {
-                    var city = histBtn.innerHTML.trim()
-                    clearForm()
-                    getAPI(city)
-                    searchTerm.value = ''
-                })
-                
-            }
-            
+        // check if value already exists in local storage
+        if (storedSearches.includes(city) === false) {
+            // if not, append to city storage array and save it to localstorage.
+            storedSearches.push(city)
+            localStorage.setItem('successful-searches', JSON.stringify(storedSearches))
+            // make saved city button
+            var histBtn = document.createElement('btn')
+            histBtn.classList = 'btn btn-outline-success me-2'
+            histBtn.setAttribute('type', 'button')
+            histBtn.setAttribute('id', city)
+            histBtn.innerHTML = city
+            containerHist.appendChild(histBtn)
+            histBtn.addEventListener('click', function () {
+                var city = histBtn.innerHTML.trim()
+                clearForm()
+                getAPI(city)
+                searchTerm.value = ''
+            })
         }
-    }  
+    }
 }
 
 function getAPI(city) {
@@ -114,14 +91,6 @@ function getAPI(city) {
     .then(function (data) {
         if (data.cod != '404') {
             city = data.name
-            var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
-            if (storedSearches != null) {
-                console.log(storedSearches)
-                if (!storedSearches.includes(city)) {
-                    storedSearches.push(city)
-                    localStorage.setItem('successful-searches', JSON.stringify(storedSearches))
-                }
-            }
             var lat = data.coord.lat
             var lon = data.coord.lon
             var queryURL2 = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&appid=' + APIKey + '&units=imperial'
@@ -278,12 +247,6 @@ function clearForm() {
     
 }
 
-// function searchCityHist() {
-//     var city = histBtn.innerHTML.trim()
-//     clearForm()
-//     getAPI(city)
-//     searchTerm.value = ''
-// }
 
 function searchCityBox() {
     event.preventDefault();

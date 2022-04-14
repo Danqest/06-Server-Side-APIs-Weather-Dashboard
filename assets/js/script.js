@@ -8,7 +8,7 @@ var formEl = document.querySelector('#search-form')
 var containerHist = document.querySelector('#history-container')
 
 var APIKey = 'e2e8aa238c17cef17b8835fdca0cfb44'
-var histSearches = []
+var storedSearches = []
 
 function init() {
     initloadBtns()
@@ -16,32 +16,72 @@ function init() {
 
 function initloadBtns() {
     var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
-    if (storedSearches != null) {
-        for (var i = 0; i < storedSearches.length; i++) {
-            var btnID = document.querySelector(('#'+storedSearches[i]))
-            if (btnID === null) {
-                var histBtn = document.createElement('btn')
-                histBtn.classList = 'btn btn-outline-success me-2'
-                histBtn.setAttribute('type', 'button')
-                // histBtn.setAttribute('id', city)
-                histBtn.innerHTML = storedSearches[i]
-                containerHist.appendChild(histBtn)
-                histBtn.addEventListener('click', function () {
-                    var city = histBtn.innerHTML.trim()
-                    clearForm()
-                    getAPI(city)
-                    searchTerm.value = ''
-                })
+    if (storedSearches === null) {
+        storedSearches = []
+    }
+    // else if (storedSearches != null) {
+    //     for (var i = 0; i < storedSearches.length; i++) {
+    //         var btnID = document.querySelector(('#'+storedSearches[i]))
+    //         if (btnID === null) {
+    //             var histBtn = document.createElement('btn')
+    //             histBtn.classList = 'btn btn-outline-success me-2'
+    //             histBtn.setAttribute('type', 'button')
+    //             // histBtn.setAttribute('id', city)
+    //             histBtn.innerHTML = storedSearches[i]
+    //             containerHist.appendChild(histBtn)
+    //             histBtn.addEventListener('click', function () {
+    //                 var city = histBtn.innerHTML.trim()
+    //                 clearForm()
+    //                 getAPI(city)
+    //                 searchTerm.value = ''
+    //             })
                 
-            }
+    //         }
             
-        }
-    }  
+    //     }
+    // }  
 }
 
 function loadBtns(city) {
+    // check if value already exists in local storage
+    // if not, add to local storage, erase prior buttons, and populate all buttons
+    // if does, erase prior buttons and populate all buttons again
+    var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
+    if (storedSearches === null) {
+        console.log('null')
+        // add to local storage, erase prior buttons, and populate all buttons
+        var histBtn = document.createElement('btn')
+        histBtn.classList = 'btn btn-outline-success me-2'
+        histBtn.setAttribute('type', 'button')
+        histBtn.setAttribute('id', city)
+        histBtn.innerHTML = city
+        containerHist.appendChild(histBtn)
+        histBtn.addEventListener('click', function () {
+            var city = histBtn.innerHTML.trim()
+            clearForm()
+            getAPI(city)
+            searchTerm.value = ''
+        })
+        // storedSearches.push(city)
+        storedSearches[0] = city
+        localStorage.setItem('successful-searches', JSON.stringify(storedSearches))
+    }
+    else if ((city in checkValues.values()) == (false || null)) {
+        console.log('not in localstorage')
+
+    }
+
+
+
+
+
+
+
     storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
-    if (storedSearches != null) {
+    if (storedSearches === null) {
+        storedSearches = histSearches
+    }
+    else if (storedSearches != null) {
         for (var i = 0; i < storedSearches.length; i++) {
             console.log(storedSearches[i])
             var btnID = document.querySelector(('#'+storedSearches[i]))

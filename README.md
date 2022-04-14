@@ -6,4 +6,4 @@ The project involves interfacing with a openweathermap.org API using an API key,
 
 A link to the deployed application can be located at: https://danqest.github.io/06-Server-Side-APIs-Weather-Dashboard/
 
-![server-side-apis](https://github.com/Danqest/05-Third-Party-APIs-Work-Day-Scheduler/blob/main/assets/images/server-side-apis.png)
+![server-side-apis](https://github.com/Danqest/06-Server-Side-APIs-Weather-Dashboard/blob/main/assets/images/server-side-apis.png)

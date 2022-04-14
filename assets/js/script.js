@@ -75,7 +75,7 @@ function getAPI(city) {
         if (data.cod != '404') {
             city = data.name
             var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
-            if (storedSearches === null) {
+            if (storedSearches != null) {
                 console.log(storedSearches)
                 if (!storedSearches.includes(city)) {
                     storedSearches.push(city)

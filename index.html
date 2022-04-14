@@ -12,13 +12,22 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Document</title>
   </head>
   <body>
-    <div class="col-12 col-md-8">
-      <h1 class="subtitle">Weather Forecast:</h1>
-      <div id="cards-container" class="list-group"></div>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1">Weather Dashboard:</span>
+        </div>
+      </nav>
+    <div class="container">
+      <h1 class="subtitle">Current Conditions:</h1>
+    </div>
+    <div class="container2">
+        <h2 class="subtitle2" style="text-align: center; margin-top: 2%;">5-Day Forecast for:</h2>
+        <div class="card-group"></div>
     </div>
     <script src="./assets/js/script.js"></script>
   </body>

@@ -12,25 +12,36 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Document</title>
   </head>
   <body>
     <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand">Weather Conditions</a>
-          <form class="d-flex" id="search-form">
-            <input class="form-control me-2" type="search" placeholder="Search US Location..." aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-      </nav>
+      <div class="container-fluid">
+        <a class="navbar-brand">Weather Conditions</a>
+        <div id="history-container"></div>
+        <form class="d-flex" id="search-form">
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search US Location..."
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
     <div class="container">
       <h1 class="subtitle">Current Conditions:</h1>
     </div>
     <div class="container2">
-        <h2 class="subtitle2" style="text-align: center; margin-top: 2%;">5-Day Forecast for:</h2>
+      <h2 class="subtitle2" style="text-align: center; margin-top: 2%">
+        5-Day Forecast for:
+      </h2>
     </div>
     <script src="./assets/js/script.js"></script>
   </body>

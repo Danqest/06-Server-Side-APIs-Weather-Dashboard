@@ -1,13 +1,69 @@
 var containerEl = document.querySelector('.container')
 var container2El = document.querySelector('.container2')
 var cardGroup = document.querySelector('.card-group')
+var subtitle = document.querySelector('.subtitle')
 var subtitle2 = document.querySelector('.subtitle2')
 var searchTerm = document.querySelector('.form-control')
 var formEl = document.querySelector('#search-form')
 var containerHist = document.querySelector('#history-container')
 
 var APIKey = 'e2e8aa238c17cef17b8835fdca0cfb44'
+var histSearches = []
 
+function init() {
+    initloadBtns()
+}
+
+function initloadBtns() {
+    var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
+    if (storedSearches != null) {
+        for (var i = 0; i < storedSearches.length; i++) {
+            var btnID = document.querySelector(('#'+storedSearches[i]))
+            if (btnID === null) {
+                var histBtn = document.createElement('btn')
+                histBtn.classList = 'btn btn-outline-success me-2'
+                histBtn.setAttribute('type', 'button')
+                // histBtn.setAttribute('id', city)
+                histBtn.innerHTML = storedSearches[i]
+                containerHist.appendChild(histBtn)
+                histBtn.addEventListener('click', function () {
+                    var city = histBtn.innerHTML.trim()
+                    clearForm()
+                    getAPI(city)
+                    searchTerm.value = ''
+                })
+                
+            }
+            
+        }
+    }  
+}
+
+function loadBtns(city) {
+    storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
+    if (storedSearches != null) {
+        for (var i = 0; i < storedSearches.length; i++) {
+            console.log(storedSearches[i])
+            var btnID = document.querySelector(('#'+storedSearches[i]))
+            if (btnID === null) {
+                var histBtn = document.createElement('btn')
+                histBtn.classList = 'btn btn-outline-success me-2'
+                histBtn.setAttribute('type', 'button')
+                histBtn.setAttribute('id', city)
+                histBtn.innerHTML = storedSearches[i]
+                containerHist.appendChild(histBtn)
+                histBtn.addEventListener('click', function () {
+                    var city = histBtn.innerHTML.trim()
+                    clearForm()
+                    getAPI(city)
+                    searchTerm.value = ''
+                })
+                
+            }
+            
+        }
+    }  
+}
 
 function getAPI(city) {
     var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + APIKey + '&units=imperial'
@@ -18,6 +74,14 @@ function getAPI(city) {
     .then(function (data) {
         if (data.cod != '404') {
             city = data.name
+            var storedSearches = JSON.parse(localStorage.getItem('successful-searches'))
+            if (storedSearches === null) {
+                console.log(storedSearches)
+                if (!storedSearches.includes(city)) {
+                    storedSearches.push(city)
+                    localStorage.setItem('successful-searches', JSON.stringify(storedSearches))
+                }
+            }
             var lat = data.coord.lat
             var lon = data.coord.lon
             var queryURL2 = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&appid=' + APIKey + '&units=imperial'
@@ -40,6 +104,11 @@ function getAPI(city) {
                     cardTitle.innerHTML = new Date(dataArr[i].dt*1000).toLocaleDateString('en-US')
                     cardBody.appendChild(cardTitle)
 
+                    var img = document.createElement('img')
+                    img.classList = "img-fluid rounded-start"
+                    img.setAttribute('src', ('./assets/images/'+dataArr[i].weather[0].main+'.png'))
+                    cardBody.appendChild(img)
+
                     var cardSubtitle = document.createElement('h3')
                     cardSubtitle.classList = 'card-subtitle mb-2 text-muted'
                     cardSubtitle.innerHTML = city
@@ -55,6 +124,21 @@ function getAPI(city) {
 
                     var weatherLi = document.createElement('p')
                     weatherLi.innerHTML = 'UV-Index: ' + dataArr[i].uvi
+                    if (dataArr[i].uvi < 3) {
+                        weatherLi.style = 'background-color: green'
+                        weatherLi.style.color = 'white'
+                    }
+                    else if (dataArr[i].uvi < 6) {
+                        weatherLi.style = 'background-color: yellow'
+                    } 
+                    else if (dataArr[i].uvi < 11) {
+                        weatherLi.style = 'background-color: red'
+                        weatherLi.style.color = 'white'
+                    }
+                    else {
+                        weatherLi.style = 'background-color: purple'
+                        weatherLi.style.color = 'white'
+                    }
                     cardBody.appendChild(weatherLi)
 
                     var weatherLi = document.createElement('p')
@@ -77,7 +161,7 @@ function getAPI(city) {
                 for (var i = 1; i < 6; i++) {
 
                     var cardEl = document.createElement('div')
-                    cardEl.classList = 'card'
+                    cardEl.classList = 'card text-center'
 
                     var cardBody = document.createElement('div')
                     cardBody.classList = 'card-body'
@@ -86,6 +170,11 @@ function getAPI(city) {
                     cardTitle.classList = 'card-title'
                     cardTitle.innerHTML = new Date(dataArr[i].dt*1000).toLocaleDateString('en-US')
                     cardBody.appendChild(cardTitle)
+
+                    var img = document.createElement('img')
+                    img.classList = "img-fluid rounded-start"
+                    img.setAttribute('src', ('./assets/images/'+dataArr[i].weather[0].main+'.png'))
+                    cardBody.appendChild(img)
 
                     var weatherLi = document.createElement('p')
                     weatherLi.innerHTML = 'Humidity: ' + dataArr[i].humidity
@@ -97,6 +186,21 @@ function getAPI(city) {
 
                     var weatherLi = document.createElement('p')
                     weatherLi.innerHTML = 'UV-Index: ' + dataArr[i].uvi
+                    if (dataArr[i].uvi < 3) {
+                        weatherLi.style = 'background-color: green'
+                        weatherLi.style.color = 'white'
+                    }
+                    else if (dataArr[i].uvi < 6) {
+                        weatherLi.style = 'background-color: yellow'
+                    } 
+                    else if (dataArr[i].uvi < 11) {
+                        weatherLi.style = 'background-color: red'
+                        weatherLi.style.color = 'white'
+                    }
+                    else {
+                        weatherLi.style = 'background-color: purple'
+                        weatherLi.style.color = 'white'
+                    }
                     cardBody.appendChild(weatherLi)
 
                     var weatherLi = document.createElement('p')
@@ -111,21 +215,12 @@ function getAPI(city) {
                     cardEl.appendChild(cardBody)
                     cardGroup.appendChild(cardEl)
                 }
+                subtitle.innerHTML = 'Current Conditions:'
                 subtitle2.innerHTML = '5-Day Forecast for ' + city
-                var histBtn = document.createElement('btn')
-                histBtn.classList = 'btn btn-outline-success me-2'
-                histBtn.setAttribute('type', 'button')
-                histBtn.innerHTML = city
-                containerHist.appendChild(histBtn)
-                histBtn.addEventListener('click', function () {
-                    var city = histBtn.innerHTML.trim()
-                    clearForm()
-                    getAPI(city)
-                    searchTerm.value = ''
-                    histBtn.remove()
-                })
+
+                loadBtns(city)
             })
-        } else alert("City not found!")
+        } else alert(city + " not found! Please try a valid location.")
         
     })   
     
@@ -143,12 +238,12 @@ function clearForm() {
     
 }
 
-function searchCityHist() {
-    var city = histBtn.innerHTML.trim()
-    clearForm()
-    getAPI(city)
-    searchTerm.value = ''
-}
+// function searchCityHist() {
+//     var city = histBtn.innerHTML.trim()
+//     clearForm()
+//     getAPI(city)
+//     searchTerm.value = ''
+// }
 
 function searchCityBox() {
     event.preventDefault();
@@ -163,3 +258,5 @@ function searchCityBox() {
 }
 
 formEl.addEventListener('submit', searchCityBox)
+
+init()
